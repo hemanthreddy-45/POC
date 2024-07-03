@@ -14,41 +14,7 @@ pipeline {
             }
         }
 
-        stage('Build with Gradle') {
-            steps {
-                script {
-                    sh './gradlew build'
-                }
-            }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    docker.build(DOCKER_IMAGE)
-                }
-            }
-        }
-
-        stage('SonarQube Analysis') {
-            environment {
-                scannerHome = tool 'SonarQubeScanner'
-            }
-            steps {
-                withSonarQubeEnv('SonarQubeServer') {
-                    sh "${scannerHome}/bin/sonar-scanner"
-                }
-            }
-        }
-
-        stage('Octopus Deploy') {
-            steps {
-                script {
-                    def octopus = load 'octopus-deploy.groovy'
-                    octopus.deploy()
-                }
-            }
-        }
+        
     }
 
     post {
